@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "404230939836",
+    "project_id": "movereminder-8d319",
+    "storage_bucket": "movereminder-8d319.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404230939836:android:ee8a561853d6d0b9c95cb9",
+        "android_client_info": {
+          "package_name": "com.example.projekt_pierwsza_wersja"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBP0tAQRrkby31yeA0CWqSqK7TBEQHNtnQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
