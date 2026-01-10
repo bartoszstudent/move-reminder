@@ -27,7 +27,7 @@ class BackgroundStepService {
   }
 
   static Future<void> _backgroundStepTask() async {
-    print('📱 BackgroundStepService: Task started');
+    print('BackgroundStepService: Task started');
 
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -35,7 +35,7 @@ class BackgroundStepService {
       final user = auth.currentUser;
 
       if (user == null) {
-        print('⚠️ BackgroundStepService: No user logged in');
+        print('BackgroundStepService: No user logged in');
         return;
       }
 
@@ -44,12 +44,12 @@ class BackgroundStepService {
       int lastSavedSteps = prefs.getInt('last_saved_steps_${user.uid}') ?? 0;
 
       print(
-        '📊 BackgroundStepService: Baseline=$baseline, LastSaved=$lastSavedSteps',
+        'BackgroundStepService: Baseline=$baseline, LastSaved=$lastSavedSteps',
       );
 
       // Get steps from Health (Google Fit on Android, HealthKit on iOS)
       int googleFitSteps = await _getHealthSteps();
-      print('🏃 BackgroundStepService: Google Fit steps=$googleFitSteps');
+      print('BackgroundStepService: Google Fit steps=$googleFitSteps');
 
       // Calculate delta (difference)
       int delta = googleFitSteps - baseline;
@@ -58,7 +58,7 @@ class BackgroundStepService {
       // New total steps
       int newTotalSteps = lastSavedSteps + delta;
 
-      print('✅ BackgroundStepService: Delta=$delta, NewTotal=$newTotalSteps');
+      print('BackgroundStepService: Delta=$delta, NewTotal=$newTotalSteps');
 
       // Save to Firebase with delta
       if (delta > 0) {
@@ -83,18 +83,18 @@ class BackgroundStepService {
             .inMinutes;
 
         print(
-          '⏱️ BackgroundStepService: Inactivity=$inactiveMinutes min (delta=$delta)',
+          ' BackgroundStepService: Inactivity=$inactiveMinutes min (delta=$delta)',
         );
 
         if (inactiveMinutes >= 30) {
-          print('🔔 BackgroundStepService: Sending inactivity notification');
+          print('BackgroundStepService: Sending inactivity notification');
           await NotificationService().showInactivityNotification(
             inactivityMinutes: inactiveMinutes,
           );
         }
       }
     } catch (e) {
-      print('❌ BackgroundStepService: Error - $e');
+      print('BackgroundStepService: Error - $e');
     }
   }
 
@@ -112,7 +112,7 @@ class BackgroundStepService {
       );
 
       if (!requested) {
-        print('⚠️ BackgroundStepService: Health permissions not granted');
+        print('BackgroundStepService: Health permissions not granted');
         return 0;
       }
 
@@ -134,7 +134,7 @@ class BackgroundStepService {
 
       return totalSteps;
     } catch (e) {
-      print('❌ BackgroundStepService: Error getting health steps - $e');
+      print('BackgroundStepService: Error getting health steps - $e');
       return 0;
     }
   }
@@ -142,7 +142,7 @@ class BackgroundStepService {
   /// Initialize background step tracking
   static Future<void> initBackgroundTracking() async {
     try {
-      print('🚀 BackgroundStepService: Initializing background tracking');
+      print('BackgroundStepService: Initializing background tracking');
 
       // Initialize workmanager
       await Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
@@ -154,9 +154,9 @@ class BackgroundStepService {
         frequency: Duration(minutes: 15),
       );
 
-      print('✅ BackgroundStepService: Background tracking initialized');
+      print('BackgroundStepService: Background tracking initialized');
     } catch (e) {
-      print('❌ BackgroundStepService: Initialization error - $e');
+      print('BackgroundStepService: Initialization error - $e');
     }
   }
 
@@ -164,9 +164,9 @@ class BackgroundStepService {
   static Future<void> stopBackgroundTracking() async {
     try {
       await Workmanager().cancelAll();
-      print('✅ BackgroundStepService: Background tracking stopped');
+      print('BackgroundStepService: Background tracking stopped');
     } catch (e) {
-      print('❌ BackgroundStepService: Stop error - $e');
+      print('BackgroundStepService: Stop error - $e');
     }
   }
 }

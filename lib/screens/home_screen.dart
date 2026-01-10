@@ -87,13 +87,13 @@ class _HomeScreenState extends State<HomeScreen> {
         const Duration(seconds: 5),
         onTimeout: () {
           print(
-            '⚠️ HomeScreen: getCurrentUser timeout, continuing with limited data',
+            ' HomeScreen: getCurrentUser timeout, continuing with limited data',
           );
           return null;
         },
       );
     } catch (e) {
-      print('⚠️ HomeScreen: Error getting current user: $e');
+      print('HomeScreen: Error getting current user: $e');
     }
 
     if (_currentUser != null) {
@@ -103,20 +103,20 @@ class _HomeScreenState extends State<HomeScreen> {
             .getTodayActivity(_currentUser!.uid)
             .timeout(const Duration(seconds: 5));
 
-        print('✅ HomeScreen: getTodayActivity result: $_todayActivity');
+        print('HomeScreen: getTodayActivity result: $_todayActivity');
         if (_todayActivity != null) {
           print(
-            '📊 HomeScreen: Loaded activity - steps: ${_todayActivity!.steps}',
+            ' HomeScreen: Loaded activity - steps: ${_todayActivity!.steps}',
           );
           _stepCount = _todayActivity!.steps;
           _inactivityMinutes = _todayActivity!.inactivityMinutes;
           _calories = _todayActivity!.calories.toDouble();
           _activityPercentage = _todayActivity!.activityPercentage;
         } else {
-          print('⚠️ HomeScreen: No activity data found for today');
+          print('HomeScreen: No activity data found for today');
         }
       } catch (e) {
-        print('⚠️ HomeScreen: Error loading activity data: $e');
+        print('HomeScreen: Error loading activity data: $e');
       }
 
       try {
@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ];
         }
       } catch (e) {
-        print('⚠️ HomeScreen: Error loading tips: $e');
+        print('HomeScreen: Error loading tips: $e');
         _tips = [
           TipsService.getDefaultTip(0),
           TipsService.getDefaultTip(1),
@@ -147,10 +147,10 @@ class _HomeScreenState extends State<HomeScreen> {
             .getWeeklyActivity(_currentUser!.uid)
             .timeout(const Duration(seconds: 5));
         print(
-          '📊 HomeScreen: Loaded ${_weeklyActivities.length} days of history',
+          ' HomeScreen: Loaded ${_weeklyActivities.length} days of history',
         );
       } catch (e) {
-        print('⚠️ HomeScreen: Error loading weekly activity: $e');
+        print('HomeScreen: Error loading weekly activity: $e');
         _weeklyActivities = [];
       }
 
@@ -192,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _inactivityMinutes = 0;
         _inactivityNotificationSent = false; // Reset notification flag
         print(
-          '✅ HomeScreen: New steps detected! Steps: $_previousStepCount -> $_stepCount',
+          'HomeScreen: New steps detected! Steps: $_previousStepCount -> $_stepCount',
         );
       }
 
@@ -238,11 +238,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final threshold = _currentUser?.inactivityThreshold ?? 30;
     if (_inactivityMinutes >= threshold) {
       print(
-        '⏱️ HomeScreen: Inactivity detected - $_inactivityMinutes minutes >= $threshold min threshold',
+        ' HomeScreen: Inactivity detected - $_inactivityMinutes minutes >= $threshold min threshold',
       );
 
       if (!_inactivityNotificationSent) {
-        print('🔔 HomeScreen: Sending inactivity notification');
+        print('HomeScreen: Sending inactivity notification');
         _notificationService.showInactivityNotification(
           inactivityMinutes: _inactivityMinutes,
         );
@@ -288,9 +288,9 @@ class _HomeScreenState extends State<HomeScreen> {
         DateTime.now().toIso8601String(),
       );
 
-      print('💾 HomeScreen: Activity data saved - $_stepCount steps');
+      print('HomeScreen: Activity data saved - $_stepCount steps');
     } catch (e) {
-      print('❌ HomeScreen: Error saving activity data: $e');
+      print('HomeScreen: Error saving activity data: $e');
     }
   }
 

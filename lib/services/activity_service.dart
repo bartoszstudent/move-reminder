@@ -10,7 +10,7 @@ class ActivityService {
   }) async {
     try {
       print(
-        '📝 ActivityService: Saving activity for user $userId, doc ID: ${activityData.id}, steps: ${activityData.steps}',
+        'ActivityService: Saving activity for user $userId, doc ID: ${activityData.id}, steps: ${activityData.steps}',
       );
       await _firestore
           .collection('users')
@@ -18,9 +18,9 @@ class ActivityService {
           .collection('activities')
           .doc(activityData.id)
           .set(activityData.toMap());
-      print('✅ ActivityService: Successfully saved activity');
+      print('ActivityService: Successfully saved activity');
     } catch (e) {
-      print('❌ Save activity error: $e');
+      print('Save activity error: $e');
     }
   }
 
@@ -31,7 +31,7 @@ class ActivityService {
           '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
 
       print(
-        '🔍 ActivityService: Loading activity - user: $userId, docId: $activityId',
+        'ActivityService: Loading activity - user: $userId, docId: $activityId',
       );
       final doc = await _firestore
           .collection('users')
@@ -41,13 +41,13 @@ class ActivityService {
           .get();
 
       if (doc.exists) {
-        print('✅ ActivityService: Found activity data: ${doc.data()}');
+        print('ActivityService: Found activity data: ${doc.data()}');
         return ActivityData.fromMap(doc.data()!, doc.id);
       }
-      print('⚠️ ActivityService: No activity document found for $activityId');
+      print('ActivityService: No activity document found for $activityId');
       return null;
     } catch (e) {
-      print('❌ Get today activity error: $e');
+      print('Get today activity error: $e');
       return null;
     }
   }
@@ -142,7 +142,7 @@ class ActivityService {
   }) async {
     try {
       print(
-        '📝 ActivityService: Saving delta activity for user $userId, delta: $deltaSteps',
+        'ActivityService: Saving delta activity for user $userId, delta: $deltaSteps',
       );
 
       final today = DateTime.now();
@@ -164,7 +164,7 @@ class ActivityService {
         final newSteps = currentSteps + deltaSteps;
 
         print(
-          '✅ ActivityService: Updating existing activity - $currentSteps + $deltaSteps = $newSteps',
+          'ActivityService: Updating existing activity - $currentSteps + $deltaSteps = $newSteps',
         );
 
         await doc.reference.update({
@@ -174,7 +174,7 @@ class ActivityService {
       } else {
         // Create new activity with delta
         print(
-          '✅ ActivityService: Creating new activity with delta steps: $deltaSteps',
+          'ActivityService: Creating new activity with delta steps: $deltaSteps',
         );
 
         final newActivity = ActivityData(
@@ -196,9 +196,9 @@ class ActivityService {
             .set(newActivity.toMap());
       }
 
-      print('✅ ActivityService: Successfully saved delta activity');
+      print('ActivityService: Successfully saved delta activity');
     } catch (e) {
-      print('❌ Save delta activity error: $e');
+      print('Save delta activity error: $e');
     }
   }
 }

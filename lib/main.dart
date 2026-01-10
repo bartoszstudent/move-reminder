@@ -16,9 +16,9 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    print('✅ Firebase initialized successfully');
+    print('Firebase initialized successfully');
   } catch (e) {
-    print('❌ Firebase initialization failed: $e');
+    print('Firebase initialization failed: $e');
   }
 
   runApp(const MyApp());
@@ -61,13 +61,13 @@ class _AuthWrapperState extends State<AuthWrapper> {
   @override
   void initState() {
     super.initState();
-    print('🔵 AuthWrapper: Checking current user');
+    print('AuthWrapper: Checking current user');
     // Check if user is already logged in
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
-      print('✅ AuthWrapper: User found - ${currentUser.email}');
+      print('AuthWrapper: User found - ${currentUser.email}');
     } else {
-      print('❌ AuthWrapper: No user logged in');
+      print('AuthWrapper: No user logged in');
     }
 
     // Listen to auth state changes in background
