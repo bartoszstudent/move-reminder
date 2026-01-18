@@ -116,7 +116,7 @@ class ActivityService {
         final activity = ActivityData.fromMap(doc.data(), doc.id);
         totalSteps += activity.steps;
         totalCalories += activity.calories;
-        totalInactivity += activity.inactivityMinutes;
+        totalInactivity += activity.cumulativeInactivityMinutes;
       }
 
       return {
@@ -184,6 +184,7 @@ class ActivityService {
           steps: deltaSteps,
           calories: 0,
           inactivityMinutes: 0,
+          cumulativeInactivityMinutes: 0,
           activityPercentage: 0.0,
           sessions: [],
         );

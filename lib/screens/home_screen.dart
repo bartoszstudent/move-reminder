@@ -263,6 +263,15 @@ class _HomeScreenState extends State<HomeScreen> {
       final activityId =
           '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
 
+      // Load existing activity to get cumulative inactivity
+      int cumulativeInactivity = 0;
+      if (_todayActivity != null) {
+        cumulativeInactivity = _todayActivity!.cumulativeInactivityMinutes;
+      }
+
+      // Add current inactivity period to cumulative
+      cumulativeInactivity += _inactivityMinutes;
+
       final activityData = ActivityData(
         id: activityId,
         userId: _currentUser!.uid,
@@ -270,6 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
         steps: _stepCount,
         calories: _calories.toInt(),
         inactivityMinutes: _inactivityMinutes,
+        cumulativeInactivityMinutes: cumulativeInactivity,
         activityPercentage: _activityPercentage,
         sessions: [],
       );

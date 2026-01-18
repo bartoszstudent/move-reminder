@@ -5,6 +5,7 @@ class ActivityData {
   final int steps;
   final int calories;
   final int inactivityMinutes;
+  final int cumulativeInactivityMinutes;
   final double activityPercentage;
   final List<ActivitySession> sessions;
 
@@ -15,6 +16,7 @@ class ActivityData {
     required this.steps,
     required this.calories,
     required this.inactivityMinutes,
+    required this.cumulativeInactivityMinutes,
     required this.activityPercentage,
     required this.sessions,
   });
@@ -27,6 +29,7 @@ class ActivityData {
       'steps': steps,
       'calories': calories,
       'inactivityMinutes': inactivityMinutes,
+      'cumulativeInactivityMinutes': cumulativeInactivityMinutes,
       'activityPercentage': activityPercentage,
       'sessions': sessions.map((s) => s.toMap()).toList(),
     };
@@ -40,6 +43,7 @@ class ActivityData {
       steps: map['steps'] ?? 0,
       calories: map['calories'] ?? 0,
       inactivityMinutes: map['inactivityMinutes'] ?? 0,
+      cumulativeInactivityMinutes: map['cumulativeInactivityMinutes'] ?? 0,
       activityPercentage: (map['activityPercentage'] ?? 0.0).toDouble(),
       sessions:
           (map['sessions'] as List<dynamic>?)
