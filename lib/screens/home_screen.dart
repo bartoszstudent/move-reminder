@@ -78,22 +78,17 @@ class _HomeScreenState extends State<HomeScreen> {
     // Initialize notifications
     await _notificationService.initialize();
 
-    // Initialize background step tracking
-    await BackgroundStepService.initBackgroundTracking();
+    // Initialize background step tracking asynchronously (don't wait)
+    BackgroundStepService.initBackgroundTracking();
 
     // Get current user - with timeout to prevent blocking auth stream
     try {
       _currentUser = await _authService.getCurrentUser().timeout(
         const Duration(seconds: 5),
-        onTimeout: () {
-          print(
-            ' HomeScreen: getCurrentUser timeout, continuing with limited data',
-          );
-          return null;
-        },
+        onTimeout: () => null,
       );
     } catch (e) {
-      print('HomeScreen: Error getting current user: $e');
+      // Error getting current user
     }
 
     if (_currentUser != null) {
@@ -103,20 +98,14 @@ class _HomeScreenState extends State<HomeScreen> {
             .getTodayActivity(_currentUser!.uid)
             .timeout(const Duration(seconds: 5));
 
-        print('HomeScreen: getTodayActivity result: $_todayActivity');
         if (_todayActivity != null) {
-          print(
-            ' HomeScreen: Loaded activity - steps: ${_todayActivity!.steps}',
-          );
           _stepCount = _todayActivity!.steps;
           _inactivityMinutes = _todayActivity!.inactivityMinutes;
           _calories = _todayActivity!.calories.toDouble();
           _activityPercentage = _todayActivity!.activityPercentage;
-        } else {
-          print('HomeScreen: No activity data found for today');
         }
       } catch (e) {
-        print('HomeScreen: Error loading activity data: $e');
+        // Error loading activity data
       }
 
       try {
@@ -133,7 +122,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ];
         }
       } catch (e) {
-        print('HomeScreen: Error loading tips: $e');
         _tips = [
           TipsService.getDefaultTip(0),
           TipsService.getDefaultTip(1),
@@ -146,11 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _weeklyActivities = await _activityService
             .getWeeklyActivity(_currentUser!.uid)
             .timeout(const Duration(seconds: 5));
-        print(
-          ' HomeScreen: Loaded ${_weeklyActivities.length} days of history',
-        );
       } catch (e) {
-        print('HomeScreen: Error loading weekly activity: $e');
         _weeklyActivities = [];
       }
 
@@ -191,9 +175,6 @@ class _HomeScreenState extends State<HomeScreen> {
         _lastActivityTime = DateTime.now();
         _inactivityMinutes = 0;
         _inactivityNotificationSent = false; // Reset notification flag
-        print(
-          'HomeScreen: New steps detected! Steps: $_previousStepCount -> $_stepCount',
-        );
       }
 
       // Check if goal reached
@@ -237,12 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // Show notification if threshold exceeded and not already sent
     final threshold = _currentUser?.inactivityThreshold ?? 30;
     if (_inactivityMinutes >= threshold) {
-      print(
-        ' HomeScreen: Inactivity detected - $_inactivityMinutes minutes >= $threshold min threshold',
-      );
-
       if (!_inactivityNotificationSent) {
-        print('HomeScreen: Sending inactivity notification');
         _notificationService.showInactivityNotification(
           inactivityMinutes: _inactivityMinutes,
         );
@@ -297,10 +273,8 @@ class _HomeScreenState extends State<HomeScreen> {
         'last_activity_${_currentUser!.uid}',
         DateTime.now().toIso8601String(),
       );
-
-      print('HomeScreen: Activity data saved - $_stepCount steps');
     } catch (e) {
-      print('HomeScreen: Error saving activity data: $e');
+      // Error saving activity data
     }
   }
 

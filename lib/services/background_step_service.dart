@@ -27,15 +27,12 @@ class BackgroundStepService {
   }
 
   static Future<void> _backgroundStepTask() async {
-    print('BackgroundStepService: Task started');
-
     try {
       final prefs = await SharedPreferences.getInstance();
       final auth = FirebaseAuth.instance;
       final user = auth.currentUser;
 
       if (user == null) {
-        print('BackgroundStepService: No user logged in');
         return;
       }
 
@@ -43,13 +40,8 @@ class BackgroundStepService {
       int baseline = prefs.getInt('steps_baseline_${user.uid}') ?? 0;
       int lastSavedSteps = prefs.getInt('last_saved_steps_${user.uid}') ?? 0;
 
-      print(
-        'BackgroundStepService: Baseline=$baseline, LastSaved=$lastSavedSteps',
-      );
-
       // Get steps from Health (Google Fit on Android, HealthKit on iOS)
       int googleFitSteps = await _getHealthSteps();
-      print('BackgroundStepService: Google Fit steps=$googleFitSteps');
 
       // Calculate delta (difference)
       int delta = googleFitSteps - baseline;
@@ -57,8 +49,6 @@ class BackgroundStepService {
 
       // New total steps
       int newTotalSteps = lastSavedSteps + delta;
-
-      print('BackgroundStepService: Delta=$delta, NewTotal=$newTotalSteps');
 
       // Save to Firebase with delta
       if (delta > 0) {
@@ -82,19 +72,14 @@ class BackgroundStepService {
             .difference(lastActivityTime)
             .inMinutes;
 
-        print(
-          ' BackgroundStepService: Inactivity=$inactiveMinutes min (delta=$delta)',
-        );
-
         if (inactiveMinutes >= 30) {
-          print('BackgroundStepService: Sending inactivity notification');
           await NotificationService().showInactivityNotification(
             inactivityMinutes: inactiveMinutes,
           );
         }
       }
     } catch (e) {
-      print('BackgroundStepService: Error - $e');
+      // Background step task error
     }
   }
 
@@ -112,7 +97,6 @@ class BackgroundStepService {
       );
 
       if (!requested) {
-        print('BackgroundStepService: Health permissions not granted');
         return 0;
       }
 
@@ -134,7 +118,6 @@ class BackgroundStepService {
 
       return totalSteps;
     } catch (e) {
-      print('BackgroundStepService: Error getting health steps - $e');
       return 0;
     }
   }
@@ -142,21 +125,21 @@ class BackgroundStepService {
   /// Initialize background step tracking
   static Future<void> initBackgroundTracking() async {
     try {
-      print('BackgroundStepService: Initializing background tracking');
-
-      // Initialize workmanager
-      await Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+      // Initialize workmanager with timeout
+      await Workmanager()
+          .initialize(callbackDispatcher, isInDebugMode: true)
+          .timeout(Duration(seconds: 10));
 
       // Register periodic task (15 minutes)
-      await Workmanager().registerPeriodicTask(
-        backgroundStepTaskId,
-        backgroundStepTaskId,
-        frequency: Duration(minutes: 15),
-      );
-
-      print('BackgroundStepService: Background tracking initialized');
+      await Workmanager()
+          .registerPeriodicTask(
+            backgroundStepTaskId,
+            backgroundStepTaskId,
+            frequency: Duration(minutes: 15),
+          )
+          .timeout(Duration(seconds: 10));
     } catch (e) {
-      print('BackgroundStepService: Initialization error - $e');
+      // Initialization error - don't crash app
     }
   }
 
@@ -164,9 +147,8 @@ class BackgroundStepService {
   static Future<void> stopBackgroundTracking() async {
     try {
       await Workmanager().cancelAll();
-      print('BackgroundStepService: Background tracking stopped');
     } catch (e) {
-      print('BackgroundStepService: Stop error - $e');
+      // Stop error
     }
   }
 }

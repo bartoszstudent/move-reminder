@@ -31,7 +31,6 @@ class TipsService {
       }
       return null;
     } catch (e) {
-      print('Get tip error: $e');
       return null;
     }
   }
@@ -50,7 +49,6 @@ class TipsService {
 
       return tips;
     } catch (e) {
-      print('Get tips error: $e');
       return [];
     }
   }

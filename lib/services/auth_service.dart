@@ -14,11 +14,7 @@ class AuthService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   String _getErrorMessage(dynamic error) {
-    print('Firebase Error Details: $error'); // Debug log
     if (error is FirebaseAuthException) {
-      print(
-        'FirebaseAuthException code: ${error.code}, message: ${error.message}',
-      );
       switch (error.code) {
         case 'weak-password':
           return 'Hasło jest za słabe. Użyj co najmniej 6 znaków.';
@@ -69,7 +65,6 @@ class AuthService {
       await _firestore.collection('users').doc(user.uid).set(userModel.toMap());
       return AuthResult(user: userModel);
     } catch (e) {
-      print('Sign up error: $e');
       return AuthResult(errorMessage: _getErrorMessage(e));
     }
   }
@@ -96,7 +91,6 @@ class AuthService {
       }
       return AuthResult(errorMessage: 'Profil użytkownika nie znaleziony.');
     } catch (e) {
-      print('Sign in error: $e');
       return AuthResult(errorMessage: _getErrorMessage(e));
     }
   }

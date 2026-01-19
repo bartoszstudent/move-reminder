@@ -43,30 +43,30 @@ class TipCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Icon(Icons.schedule, size: 16, color: Colors.grey.shade600),
-                  SizedBox(width: 4),
-                  Text(
-                    '${tip.durationMinutes} min',
-                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.local_fire_department,
-                    size: 16,
-                    color: Colors.orange,
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    '${tip.caloriesBurned} kcal',
-                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                  ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     Icon(Icons.schedule, size: 16, color: Colors.grey.shade600),
+              //     SizedBox(width: 4),
+              //     // Text(
+              //     //   '${tip.durationMinutes} min',
+              //     //   style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+              //     // ),
+              //   ],
+              // ),
+              // Row(
+              //   children: [
+              //     Icon(
+              //       Icons.local_fire_department,
+              //       size: 16,
+              //       color: Colors.orange,
+              //     ),
+              //     SizedBox(width: 4),
+              //     // Text(
+              //     //   '${tip.caloriesBurned} kcal',
+              //     //   style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+              //     // ),
+              //   ],
+              // ),
             ],
           ),
         ],
